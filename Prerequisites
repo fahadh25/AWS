@@ -1,0 +1,5 @@
+1. Check location of the instance. All locations aren't supported for serial console.
+2. Grand necessary permission.
+3. Instance type also a great factor.
+
+Check below doc for more info:  https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-serial-console-prerequisites.html
