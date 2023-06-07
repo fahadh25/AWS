@@ -1,0 +1,68 @@
+Step 1: Grand Access
+----------------------
+
+1. Attach policy "EC2InstanceConnect" with the user from IAM dashboard. 
+ or create a new policy with below JSON code and attach it with the user/group.
+
+		{
+			"Version": "2012-10-17",
+			"Statement": [
+				{
+					"Sid": "AllowDescribeInstances",
+					"Effect": "Allow",
+					"Action": [
+						"ec2:DescribeInstances",
+						"ec2:DescribeInstanceTypes",
+						"ec2:GetSerialConsoleAccessStatus"
+					],
+					"Resource": "*"
+				},
+				{
+					"Sid": "AllowinstanceBasedSerialConsoleAccess",
+					"Effect": "Allow",
+					"Action": [
+						"ec2-instance-connect:SendSerialConsoleSSHPublicKey"
+					],
+					"Resource": "*"
+				}
+			]
+		}
+
+
+2. Go to "EC2 Dashboard" and click on the "EC2 Serial Console" from the "Account Attributes" section in the right side.
+3. Enable/Allow account to use EC2 Serial Consol.
+
+
+
+Step 2: Configure the EC2 with necessary SAC settings.
+-------------------------------------------------------
+
+4. Login to the windows instance where to enable serial consol.
+5. Open powershell as Administrator and run below commands:
+
+	bcdedit /ems '{current}' on
+	bcdedit /emssettings EMSPORT:1 EMSBAUDRATE:115200
+	bcdedit /set '{bootmgr}' displaybootmenu yes
+	bcdedit /set '{bootmgr}' timeout 15
+	bcdedit /set '{bootmgr}' bootems yes
+
+
+Step 3: Access the console
+----------------------------
+
+
+6. Now access the console, select the Instance > Action > Monitor and Troubleshoot > EC2 Serial Console 
+7. If SAC is enabled on the instance, the serial console displays the "SAC>" prompt.
+
+SAC command line:
+7. press "?"
+8. To create a command prompt channel (cmd0001 or cmd0002), enter "cmd".
+9. To view the command prompt channel: press ESC, and then press TAB.
+10. Enter the credentials required by the command prompt channel.
+
+You are supposed to get the cmd insterface of the instance, verify using "diskpart" or "netsh" command.
+Powershell command also can be used.
+
+
+Ref: https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/troubleshooting-sac.html
+
